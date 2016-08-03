@@ -8,13 +8,17 @@ mongodb:
 
 app:
     build: ./app
-    command: nodemon index.js
+    command: nodemon app.js
     dockerfile: Dockerfile
     ports:
         - "3000:3000"
     restart: unless-stopped
     links:
-        – mongodb
+        - mongodb
     environment:
-        - MONGO=mongo
+        - MONGOHOST=mongodb
+        - MONGOPORT=27017
+        - ENVIRON=TEST
         - PORT=3000
+        - DEBUG=info,warn
+
