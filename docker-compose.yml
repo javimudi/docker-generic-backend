@@ -1,0 +1,20 @@
+mongodb:
+    image: mongo:latest
+    volumes:
+        - /opt/mongodb:/data/db
+    ports:
+        - "27017:27017"
+    restart: unless-stopped
+
+app:
+    build: ./app
+    command: nodemon index.js
+    dockerfile: Dockerfile
+    ports:
+        - "3000:3000"
+    restart: unless-stopped
+    links:
+        – mongodb
+    environment:
+        - MONGO=mongo
+        - PORT=3000
