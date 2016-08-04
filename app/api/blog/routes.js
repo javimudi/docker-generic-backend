@@ -1,6 +1,7 @@
 'use strict';
 var app = require('./app'),
 express = require('express'),
+passport = require('passport'),
 router = express.Router();
 
 // Routes definitions

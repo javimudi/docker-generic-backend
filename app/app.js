@@ -5,7 +5,21 @@ env = require('process').env,
 bodyparser = require('body-parser'),
 mongoose = require('mongoose'),
 settings = require('./settings'),
-discover = require('./routes');
+discover = require('./routes'),
+passport = require('passport'),
+Strategy = require('passport-http').DigestStrategy,
+findByUsername = require('./api/blog/auth');
+
+
+passport.use(new Strategy({ qop: 'auth' },
+  function(username, cb) {
+    findByUsername(username, function(err, user) {
+      if (err) { return cb(err); }
+      if (!user) { return cb(null, false); }
+      return cb(null, user, user.password);
+    })
+  }));
+
 
 
 var debug = {
@@ -22,7 +36,8 @@ var restServer = function(callback){
 	// Basic setup
 	server.use(bodyparser.urlencoded({ extended: true }));
 	server.use(bodyparser.json());
-
+	server.use(passport.initialize());
+	server.use(passport.session());
 
 	// MongoDB connection
 	mongoose.connect(settings.mongodbstring)
