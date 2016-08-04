@@ -8,15 +8,14 @@ var debug = {
 
 
 var models = require('./models'),
-Tag = models.Tag,
 Post = models.Post;
 
 // Helper to simplify db results
-function process_update(res, error, result){
+function process_update(res, error, result, a){
 
     if(error){
-        debug.error("Error 500: " + error);
-        res.sendStatus(500).json({"message": error.message});
+        debug.error("Error 400: " + error);
+        res.sendStatus(400);
     }
     else if (!result.upserted){
         res.sendStatus(200);
@@ -30,10 +29,10 @@ function process_update(res, error, result){
 }
 
 
-function process_find(res, err, result, return_value){
+function process_find(res, err, result, default_value){
 	if(err){ res.sendStatus(204); }
 	else if(result==null){
-        res.sendStatus(204).json(return_value);
+        res.json(default_value);
     }
     else{
 		res.json(result);
@@ -43,40 +42,43 @@ function process_find(res, err, result, return_value){
 
 var fetchall = function(req, res, next){
 	// TODO: PAGINATOR WITH META
-	Post.find({}).populate('tags').exec(function(err, result){
+	Post.find({}, function(err, result){
 		process_find(res, err, result, []);
 	});
 }
 
 var fetchone = function(req, res, next){
-	Post.findOne({'_id': req.params.id}).populate('tags').exec(function(err, result){
+	Post.findOne({'_id': req.params.id}, function(err, result){
 		process_find(res, err, result, {});
 	});
 }
 
 var create = function(req, res){
 	Post(req.body).save(function(err, result){
-		if ('tags' in req.body){
-			console.log(req.body.tags);
-		}
 		process_update(res, err, result);
 	});
 }
 
 var update = function(req, res){
 	Post.update({'_id': req.params.id}, req.body, function(error, result){
-		
-		console.log(String(error));
-
 		process_update(res, error, result);
 	})
 }
 
 var drop = function(req, res){
 	Post.remove({'_id': req.params.id}, function(err, result){
-		console.log(result);
 		if(err){ res.sendStatus(204)}
-		else{ res.sendStatus(200); }
+		else{
+			if(result.result.n==0){
+				res.sendStatus(404);
+			}
+			else if(result.result.n==1){
+				res.sendStatus(200);
+			}
+			else {
+				res.sendStatus(204);
+			}
+		}
 
 	});
 }

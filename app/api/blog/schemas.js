@@ -2,20 +2,15 @@
 
 var Schema = require('mongoose').Schema;
 
-var tagSchema = new Schema({
-	tag: String
-})
-
 var postSchema = new Schema({
 	type: { type: String, enum:['text', 'quote', 'image']},
-	title: String,
-	content: String,
-	tags: [{ type: Schema.Types.ObjectId, ref: 'Tag' }]
+	title: { type: String, required: true},
+	content: { type: String, required: true},
+	tags: [{ type: String }]
 
 })
 
 module.exports = {
-	tagSchema: tagSchema,
 	postSchema: postSchema
 }
 
