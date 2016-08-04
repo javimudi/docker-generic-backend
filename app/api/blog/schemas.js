@@ -2,11 +2,9 @@
 
 var Schema = require('mongoose').Schema;
 
-
 var tagSchema = new Schema({
 	tag: String
 })
-
 
 var postSchema = new Schema({
 	type: { type: String, enum:['text', 'quote', 'image']},
@@ -15,7 +13,6 @@ var postSchema = new Schema({
 	tags: [{ type: Schema.Types.ObjectId, ref: 'Tag' }]
 
 })
-
 
 module.exports = {
 	tagSchema: tagSchema,

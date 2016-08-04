@@ -16,7 +16,7 @@ function process_update(res, error, result){
 
     if(error){
         debug.error("Error 500: " + error);
-        res.sendStatus(500);
+        res.sendStatus(500).json({"message": error.message});
     }
     else if (!result.upserted){
         res.sendStatus(200);
@@ -30,33 +30,27 @@ function process_update(res, error, result){
 }
 
 
+function process_find(res, err, result, return_value){
+	if(err){ res.sendStatus(204); }
+	else if(result==null){
+        res.sendStatus(204).json(return_value);
+    }
+    else{
+		res.json(result);
+    }	
+}
+
+
 var fetchall = function(req, res, next){
-	// TODO: PAGINATOR META
+	// TODO: PAGINATOR WITH META
 	Post.find({}).populate('tags').exec(function(err, result){
-		console.log(err, result);
-		if(err){ res.sendStatus(204); }
-		if(result==null){
-            res.sendStatus(204);
-        }
-        else{
-			res.json(result);
-        }
-	})
+		process_find(res, err, result, []);
+	});
 }
 
 var fetchone = function(req, res, next){
-
 	Post.findOne({'_id': req.params.id}).populate('tags').exec(function(err, result){
-		if(err){ res.sendStatus(204); }
-		else{
-			if(result==null){
-	            res.send(204).json({});
-	        }
-	        else{
-				res.json(result);
-	        }
-		}
-
+		process_find(res, err, result, {});
 	});
 }
 
@@ -70,15 +64,19 @@ var create = function(req, res){
 }
 
 var update = function(req, res){
-	Post.update({'_id': req.params.id}, req.body, {'upsert': true}, function(error, result){
+	Post.update({'_id': req.params.id}, req.body, function(error, result){
+		
+		console.log(String(error));
+
 		process_update(res, error, result);
 	})
 }
 
 var drop = function(req, res){
-	Post.delete({'_id': req.params.id}, function(err, result){
+	Post.remove({'_id': req.params.id}, function(err, result){
+		console.log(result);
 		if(err){ res.sendStatus(204)}
-		else { res.sendStatus(200); }
+		else{ res.sendStatus(200); }
 
 	});
 }
