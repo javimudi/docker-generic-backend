@@ -25,10 +25,13 @@
   },
   "homepage": "https://github.com/javimudi/docker-generic-backend#readme",
   "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.15.2",
     "debug": "^2.2.0",
     "express": "^4.14.0",
     "mongoose": "^4.5.8",
+    "passport": "^0.3.2",
+    "passport-http": "^0.3.0",
     "process": "^0.11.7",
     "walk": "^2.3.9"
   },
