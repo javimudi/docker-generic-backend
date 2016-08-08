@@ -36,7 +36,7 @@ var restServer = function(callback){
 
 		// Core/Auth
 		debug.info("Appending auth routes");
-		server.use('/api/'+settings.apiversion, authRoutes);
+		server.use('/api/', authRoutes);
 
 		// Routes
 		discover().on('newroute', function(routes){
