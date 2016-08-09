@@ -31,18 +31,26 @@ var debug = {
 var server = express(),
 router = express.Router();
 
+var passport = require('passport'),
+authRoutes = require('./core/auth/routes');
+
 var restServer = function(callback){
 
 	// Basic setup
 	server.use(bodyparser.urlencoded({ extended: true }));
 	server.use(bodyparser.json());
 	server.use(passport.initialize());
-	server.use(passport.session());
+
 
 	// MongoDB connection
 	mongoose.connect(settings.mongodbstring)
 	mongoose.connection.on('connected', function(){
 		debug.info("Connected to DB " + settings.mongodbstring);
+
+
+		// Core/Auth
+		debug.info("Appending auth routes");
+		server.use('/api/', authRoutes);
 
 		// Routes
 		discover().on('newroute', function(routes){
