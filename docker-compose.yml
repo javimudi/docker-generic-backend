@@ -19,6 +19,8 @@ app:
   environment:
   - PGHOST=postgis
   - PGPORT=5432
+  - PGUSER=test
+  - PGPASS=test
   - ENVIRON=TEST
   - PORT=17000
-  - DEBUG=info,warn
+  - DEBUG=info,warn,error

@@ -30,6 +30,7 @@ var restServer = function(callback){
 
 	// Postgre - PostGIS connection
 	var db = pgp(settings.pgstring);
+	debug.info("Connection to: " + settings.pgstring);
 	db.connect()
 	.then(function(){
 
