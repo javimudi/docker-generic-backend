@@ -3,7 +3,7 @@
 var express = require('express'),
 env = require('process').env,
 bodyparser = require('body-parser'),
-mongoose = require('mongoose'),
+pgp = require('pg-promise')(),
 settings = require('./settings'),
 discover = require('./routes');
 
@@ -28,11 +28,10 @@ var restServer = function(callback){
 	server.use(passport.initialize());
 
 
-	// MongoDB connection
-	mongoose.connect(settings.mongodbstring)
-	mongoose.connection.on('connected', function(){
-		debug.info("Connected to DB " + settings.mongodbstring);
-
+	// Postgre - PostGIS connection
+	var db = pgp(settings.pgstring);
+	db.connect()
+	.then(function(){
 
 		// Core/Auth
 		debug.info("Appending auth routes");
@@ -52,9 +51,10 @@ var restServer = function(callback){
 				callback();
 			}
 		});
-
+	})
+	.catch(function(err){
+		debug.error("Error connecting to database: " + err);
 	});
-
 }
 
 module.exports = {

@@ -1,24 +1,24 @@
-mongodb:
-    image: mongo:latest
-    volumes:
-        - /opt/mongodb:/data/db
-    ports:
-        - "27017:27017"
-    restart: unless-stopped
+postgis:
+  image: geographica/postgis:latest
+  ports:
+    - "5432:5432"
+  environment:
+    - CREATE_USER=test;test
 
 app:
-    build: ./app
-    command: nodemon app.js
-    dockerfile: Dockerfile
-    ports:
-        - "3000:3000"
-    restart: unless-stopped
-    links:
-        - mongodb
-    environment:
-        - MONGOHOST=mongodb
-        - MONGOPORT=27017
-        - ENVIRON=TEST
-        - PORT=3000
-        - DEBUG=info,warn
-
+  build: ./app
+  command: nodemon app.js
+  dockerfile: Dockerfile
+  ports:
+    - "17000:17000"
+  restart: unless-stopped
+  volumes:
+    - ./app:/opt/app
+  links:
+      - postgis
+  environment:
+  - PGHOST=postgis
+  - PGPORT=5432
+  - ENVIRON=TEST
+  - PORT=17000
+  - DEBUG=info,warn
