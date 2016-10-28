@@ -5,7 +5,7 @@ var env = require('process').env;
 // Settings
 
 var port = env.PORT || 17000,
-environ = env.ENVIRON || 'TEST',
+environ = env.ENVIRON || 'test',
 pguser = env.PGUSER || 'test',
 pgpass = env.PGPASS || 'test',
 pghost = env.PGHOST || "127.0.0.1",

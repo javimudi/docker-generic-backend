@@ -3,7 +3,7 @@
 var User = require('./models').User;
 
 
-var postUser = function(req, res) {
+var postUser = function(req, res, next) {
     var user = new User({
       username: req.body.username,
       password: req.body.password
@@ -17,7 +17,7 @@ var postUser = function(req, res) {
     });
   };
 
-var getUsers = function(req, res) {
+var getUsers = function(req, res, next) {
     User.find(function(err, users) {
       if (err)
         res.send(err);
