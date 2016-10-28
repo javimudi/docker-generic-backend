@@ -1,4 +1,4 @@
-FROM node:argon
+FROM node:latest
 
 MAINTAINER Javier Muñoz "javier.munoz.diaz@gmail.com"
 
