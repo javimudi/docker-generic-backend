@@ -10,7 +10,7 @@ var authPath = ospath.join(ospath.dirname(module.filename), "../..", "core/auth/
 
 var authStrategy = require(authPath);
 
-console.log(authPath);
+// console.log(authPath);
 
 // Routes definitions
 router.get('/', authStrategy.isAuthenticated, app.get);
