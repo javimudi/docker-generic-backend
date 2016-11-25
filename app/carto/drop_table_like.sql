@@ -6,7 +6,6 @@ RETURNS void
     _q text;
     _s text;
     _r record;
-    _d timestamp;
   BEGIN
     _q := format('select distinct table_name from information_schema.tables where table_name like ''%%%s%%''', expression);
     FOR _r IN EXECUTE _q  LOOP
