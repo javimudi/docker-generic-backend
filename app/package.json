@@ -26,7 +26,7 @@
   "homepage": "https://github.com/javimudi/docker-generic-backend#readme",
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",
-    "body-parser": "^1.15.2",
+    "body-parser": "^1.18.3",
     "debug": "^2.2.0",
     "express": "^4.14.0",
     "mongoose": "^4.5.8",
